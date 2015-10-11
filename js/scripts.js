@@ -5,17 +5,18 @@
  */
 
 $(function(){
+    $("body").addClass("loading");
     $.ajax({
        type: "POST",
        url: "standings.php",
        datatype: "html",
        success: function(html){
            $("#standings").html(html);
-           //hide loading symbol
+           $("body").removeClass("loading");
        },
        fail: function(){
-           $("#standings").html("<p>Failed to load standings from NHL.com</p>");
-           //hide loading symbol
+           $("#standings").html("<p>Failed to load standings from NHL.com - Try refreshing the page.</p>");
+           $("body").removeClass("loading");
        }
     });
 });
