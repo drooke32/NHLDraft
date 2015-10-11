@@ -441,7 +441,7 @@ body.loading .modal, body.loading .loadingText {
     display: none;
     position: absolute;
     z-index: 1001;
-    top: 45%;
+    top: 40%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
 }
