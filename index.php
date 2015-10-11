@@ -14,13 +14,13 @@
   <script src="js/scripts.js"></script>
 </head>
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="twelve columns" style="margin-top: 25%">
-        <h4>Basic Page</h4>
-        <div id="standings"></div>
-      </div>
+    <div class="container">
+        <div class="row">
+            <div class="twelve columns" style="margin-top: 5%">
+                <h2>Current Standings</h2>
+                <div id="standings"></div>
+            </div>
+        </div>
     </div>
-  </div>
 </body>
 </html>
