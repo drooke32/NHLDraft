@@ -68,7 +68,7 @@ foreach($html->find('table[class=standings]') as $standings){
     $headers = true;
     foreach($standings->find('tr') as $row){
         if(!$headers){
-            $team = preg_replace("/[^A-Za-z ]/", '', $row->find('td', 1)->plaintext);
+            $team = preg_replace("/[^A-Za-z .é]/", '', $row->find('td', 1)->plaintext);
             $rank = $row->find('td', 0)->plaintext;
             if(array_key_exists($team, $teams)){
                 $owner = $teams[$team];
