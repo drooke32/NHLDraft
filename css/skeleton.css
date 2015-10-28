@@ -449,3 +449,7 @@ body.loading .modal, body.loading .loadingText {
 tr:nth-child(even) {
     background-color: #EEEEEE;
 }
+
+.center{
+    text-align:center;
+}
