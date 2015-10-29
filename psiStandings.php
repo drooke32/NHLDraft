@@ -47,14 +47,14 @@ $points = [
 ];
 
 $ownerTeams = [
-    "BS" => "NY Rangers, St. Louis, Calgary",
-    "CD" => "NY Islanders, Columbus, Los Angeles",
-    "CL" => "Dallas, Minnesota, Pittsburgh",
-    "DH" => "Detroit, Florida, Washington",
-    "DR" => "Montréal, Philadelphia, Colorado",
-    "MK" => "Winnipeg, Tampa Bay, Vancouver",
-    "SG" => "San Jose, Edmonton, Anaheim",
-    "SM" => "Nashville, Chicago, Boston"
+    "BS" => "<a href='#NY Rangers'>NY Rangers</a>, <a href='#St. Louis'>St. Louis</a>, <a href='#Calgary'>Calgary</a>",
+    "CD" => "<a href='#NY Islanders'>NY Islanders</a>, <a href='#Columbus'>Columbus</a>, <a href='#Los Angeles'>Los Angeles</a>",
+    "CL" => "<a href='#Dallas'>Dallas</a>, <a href='#Minnesota'>Minnesota</a>, <a href='#Pittsburgh'>Pittsburgh</a>",
+    "DH" => "<a href='#Detroit'>Detroit</a>, <a href='#Florida'>Florida</a>, <a href='#Washington'>Washington</a>",
+    "DR" => "<a href='#Montréal'>Montréal</a>, <a href='#Philadelphia'>Philadelphia</a>, <a href='#Colorado'>Colorado</a>",
+    "MK" => "<a href='#Winnipeg'>Winnipeg</a>, <a href='#Tampa Bay'>Tampa Bay</a>, <a href='#Vancouver'>Vancouver</a>",
+    "SG" => "<a href='#San Jose'>San Jose</a>, <a href='#Edmonton'>Edmonton</a>, <a href='#Anaheim'>Anaheim</a>",
+    "SM" => "<a href='#Nashville'>Nashville</a>, <a href='#Chicago'>Chicago</a>, <a href='#Boston'>Boston</a>"
 ];
 
 
@@ -63,7 +63,9 @@ $html = file_get_html('http://www.nhl.com/ice/standings.htm?type=lea');
 
 foreach($html->find('table[class=standings]') as $standings){
     foreach($standings->find('a') as $anchor){
-        $anchor->href = "#";
+        $anchorText = $anchor->plaintext;
+        $anchorTitle = $anchor->title;
+        $anchor->outertext = "<span title='".$anchorTitle."'>".$anchorText."</span>";
     }
     $headers = true;
     foreach($standings->find('tr') as $row){
@@ -76,6 +78,7 @@ foreach($html->find('table[class=standings]') as $standings){
                     $points[$owner] += (int)$rank;
                 }
             }
+            $row->id = $team;
         }
         $headers = false;
     }
