@@ -11,7 +11,7 @@ $teams = array(
     "Detroit" => "DH",
     "Dallas" => "CL",
     "Arizona" => "NONE",
-    "Montréal" => "DR",
+    "Montreal" => "DR",
     "Ottawa" => "NONE",
     "St. Louis" => "BS",
     "Nashville" => "SM",
@@ -51,27 +51,36 @@ $ownerTeams = [
     "CD" => "<a href='#NY Islanders'>NY Islanders</a>, <a href='#Columbus'>Columbus</a>, <a href='#Los Angeles'>Los Angeles</a>",
     "CL" => "<a href='#Dallas'>Dallas</a>, <a href='#Minnesota'>Minnesota</a>, <a href='#Pittsburgh'>Pittsburgh</a>",
     "DH" => "<a href='#Detroit'>Detroit</a>, <a href='#Florida'>Florida</a>, <a href='#Washington'>Washington</a>",
-    "DR" => "<a href='#Montréal'>Montréal</a>, <a href='#Philadelphia'>Philadelphia</a>, <a href='#Colorado'>Colorado</a>",
+    "DR" => "<a href='#Montreal'>Montreal</a>, <a href='#Philadelphia'>Philadelphia</a>, <a href='#Colorado'>Colorado</a>",
     "MK" => "<a href='#Winnipeg'>Winnipeg</a>, <a href='#Tampa Bay'>Tampa Bay</a>, <a href='#Vancouver'>Vancouver</a>",
     "SG" => "<a href='#San Jose'>San Jose</a>, <a href='#Edmonton'>Edmonton</a>, <a href='#Anaheim'>Anaheim</a>",
     "SM" => "<a href='#Nashville'>Nashville</a>, <a href='#Chicago'>Chicago</a>, <a href='#Boston'>Boston</a>"
 ];
 
+$arrContextOptions=array(
+    "ssl"=>array(
+        "verify_peer"=>false,
+        "verify_peer_name"=>false,
+    ),
+); 
 
-$html = file_get_html('http://www.nhl.com/ice/standings.htm?type=lea');
+//$html = file_get_html("https://www.nhl.com/standings/league", false, stream_context_create($arrContextOptions));
+$html = file_get_html("http://espn.go.com/nhl/standings/_/group/1");
 
-
-foreach($html->find('table[class=standings]') as $standings){
+foreach($html->find('table[class=tablehead]') as $standings){
     foreach($standings->find('a') as $anchor){
         $anchorText = $anchor->plaintext;
         $anchorTitle = $anchor->title;
         $anchor->outertext = "<span title='".$anchorTitle."'>".$anchorText."</span>";
     }
-    $headers = true;
+    $rank = 1;
+    $headers = 0;
     foreach($standings->find('tr') as $row){
-        if(!$headers){
-            $team = preg_replace("/[^A-Za-z .é]/", '', $row->find('td', 1)->plaintext);
-            $rank = $row->find('td', 0)->plaintext;
+        if($headers < 2){
+            $row->innertext = "<td></td>". $row->innertext; 
+        }
+        else{
+            $team = rtrim(preg_replace("/[^A-Za-z .é]/", '', $row->find('td', 0)->plaintext));
             if(array_key_exists($team, $teams)){
                 $owner = $teams[$team];
                 if($owner != "NONE"){
@@ -79,8 +88,10 @@ foreach($html->find('table[class=standings]') as $standings){
                 }
             }
             $row->id = $team;
+            $row->innertext = "<td>" . $rank . "</td>". $row->innertext;
+            $rank++;
         }
-        $headers = false;
+        $headers++;
     }
     asort($points);
     $playerRanks = "<table class='u-full-width'><thead><tr><th>Owner</th><th>Teams</th><th class='text-center'>Total</th></tr></thead><tbody>";

@@ -28,6 +28,6 @@
         </div>
     </div>
     <div class="modal"></div>
-    <h4 class="loadingText">Loading standings from NHL.com</h4>
+    <h4 class="loadingText">Loading standings from ESPN.com</h4>
 </body>
 </html>
