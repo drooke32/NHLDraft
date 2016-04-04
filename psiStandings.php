@@ -80,7 +80,8 @@ foreach($html->find('table[class=tablehead]') as $standings){
             $row->innertext = "<td></td>". $row->innertext; 
         }
         else{
-            $team = rtrim(preg_replace("/[^A-Za-z .é]/", '', $row->find('td', 0)->plaintext));
+            $team = cleanTeamName($row->find('td', 0)->plaintext);
+            //$team = rtrim(preg_replace("/[^A-Za-z .é]/", '', $row->find('td', 0)->plaintext));
             if(array_key_exists($team, $teams)){
                 $owner = $teams[$team];
                 if($owner != "NONE"){
@@ -104,4 +105,15 @@ foreach($html->find('table[class=tablehead]') as $standings){
     $playerRanks .= $str;
     $finalHTML = str_get_html($playerRanks);
     echo $finalHTML;
+}
+
+function cleanTeamName($dirtyName){
+    //get rid of any special characters in montreal/st louis
+    $cleanName = rtrim(preg_replace("/[^A-Za-z .é]/", '', $dirtyName));
+    //clean out playoff clinch prefixes
+    $cleanerName = ltrim($cleanName, "x - ");
+    $almostCleanName = ltrim($cleanerName, "e - ");
+    $cleanestName = ltrim($almostCleanName, "* - ");
+    $fuckingClean = ltrim($cleanestName, "y - ");
+    return ltrim($fuckingClean, "z - ");
 }
